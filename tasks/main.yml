@@ -1,2 +1,5 @@
----
-# tasks file for .
+- name: "Change hostname {{ input_role_hostname_fqdn }}"
+  hostname:
+    name: "{{ input_role_hostname_fqdn.split('.')[0] }}"
+#   notify:
+#     - Reboot system
