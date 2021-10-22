@@ -1,2 +1,2 @@
 ---
-# defaults file for .
+input_role_hostname_fqdn:    "{{ inventory_hostname }}"
