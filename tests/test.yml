@@ -9,8 +9,20 @@
     vars:
       input_role_hostname_fqdn:    "{{ inventory_hostname }}"
 
-  # - name: Test command docker
-  #   shell: command -v docker
-  #   register: test_docker
-  #   changed_when: false
-  #   failed_when: test_docker.stdout == ""
+  - name: Test hostname
+    shell: hostname
+    register: test_hostname
+    changed_when: false
+    failed_when: test_hostname.stdout != inventory_hostname.split('.')[0]
+
+  - name: Test hostname in /etc/hosts
+    shell: "cat /etc/hosts | grep {{ inventory_hostname.split('.')[0] }}"
+    register: test_hosts
+    changed_when: false
+    failed_when: test_hosts.stdout == ""
+
+  - name: Test hostname fqdn in /etc/hosts
+    shell: "cat /etc/hosts | grep {{ inventory_hostname }}"
+    register: test_hosts
+    changed_when: false
+    failed_when: test_hosts.stdout == ""
