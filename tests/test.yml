@@ -1,0 +1,28 @@
+---
+- hosts: all
+  become: yes
+  remote_user: vagrant
+  gather_facts: yes
+  tasks:
+  - include_role:
+        name: ../../
+    vars:
+      input_role_hostname_fqdn:    "{{ inventory_hostname }}"
+
+  - name: Test hostname
+    shell: hostname
+    register: test_hostname
+    changed_when: false
+    failed_when: test_hostname.stdout != inventory_hostname.split('.')[0]
+
+  - name: Test hostname in /etc/hosts
+    shell: "cat /etc/hosts | grep {{ inventory_hostname.split('.')[0] }}"
+    register: test_hosts
+    changed_when: false
+    failed_when: test_hosts.stdout == ""
+
+  - name: Test hostname fqdn in /etc/hosts
+    shell: "cat /etc/hosts | grep {{ inventory_hostname }}"
+    register: test_hosts
+    changed_when: false
+    failed_when: test_hosts.stdout == ""
