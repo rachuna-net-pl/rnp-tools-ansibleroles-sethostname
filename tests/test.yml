@@ -1,5 +1,16 @@
 ---
-- hosts: localhost
-  remote_user: root
-  roles:
-    - .
+- hosts: all
+  become: yes
+  remote_user: vagrant
+  gather_facts: yes
+  tasks:
+  - include_role:
+        name: ../../
+    vars:
+      input_role_hostname_fqdn:    "{{ inventory_hostname }}"
+
+  # - name: Test command docker
+  #   shell: command -v docker
+  #   register: test_docker
+  #   changed_when: false
+  #   failed_when: test_docker.stdout == ""
